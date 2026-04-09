@@ -19,4 +19,16 @@ function divide(a, b) {
   return a / b;
 }
 
-module.exports = { add, subtract, multiply, divide };
+function sinDeg(deg) { return Math.sin(deg * Math.PI / 180); }
+function cosDeg(deg) { return Math.cos(deg * Math.PI / 180); }
+function tanDeg(deg) {
+  const normalized = ((deg % 360) + 360) % 360;
+  if (normalized === 90 || normalized === 270) return { error: '오류: 정의되지 않는 값' };
+  return Math.tan(deg * Math.PI / 180);
+}
+
+function sinRad(rad) { return Math.sin(rad); }
+function cosRad(rad) { return Math.cos(rad); }
+function tanRad(rad) { return Math.tan(rad); }
+
+module.exports = { add, subtract, multiply, divide, sinDeg, cosDeg, tanDeg, sinRad, cosRad, tanRad };
