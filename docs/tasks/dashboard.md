@@ -26,13 +26,13 @@
 | [TASK-10](TASK-10-memory.md) | 메모리 기능 구현 | FR-17~20 | ✅ |
 | [TASK-11](TASK-11-ui-theme.md) | UI/테마 구현 | NFR-02 | ✅ |
 | [TASK-12](TASK-12-performance.md) | 성능 검증 | NFR-01 | ✅ |
-| [TASK-13](TASK-13-platform-build.md) | 플랫폼 빌드 검증 | NFR-03 | ⬜ |
+| [TASK-13](TASK-13-platform-build.md) | 플랫폼 빌드 검증 | NFR-03 | ✅ |
 
 ---
 
 ## 진행 현황
 
 - 전체 태스크: 13개
-- 완료: 12개 (TASK-01~12)
+- 완료: 13개 (TASK-01~13)
 - 진행 중: 0개
-- 대기: 1개
+- 대기: 0개
