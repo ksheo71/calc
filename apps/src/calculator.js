@@ -46,4 +46,14 @@ function sqrt(val) {
 function square(val) { return val * val; }
 function power(base, exp) { return Math.pow(base, exp); }
 
-module.exports = { add, subtract, multiply, divide, sinDeg, cosDeg, tanDeg, sinRad, cosRad, tanRad, log10, ln, sqrt, square, power };
+function formatResult(val) {
+  if (typeof val !== 'number') return String(val);
+  if (!isFinite(val)) return '오류';
+  const rounded = parseFloat(val.toPrecision(10));
+  if (Math.abs(rounded) >= 1e15 || (Math.abs(rounded) < 1e-10 && rounded !== 0)) {
+    return rounded.toExponential();
+  }
+  return String(rounded);
+}
+
+module.exports = { add, subtract, multiply, divide, sinDeg, cosDeg, tanDeg, sinRad, cosRad, tanRad, log10, ln, sqrt, square, power, formatResult };

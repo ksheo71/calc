@@ -21,7 +21,7 @@
 | [TASK-05](TASK-05-trig-functions.md) | 삼각함수 및 각도 모드 구현 | FR-05, FR-06, FR-07, FR-13 | ✅ |
 | [TASK-06](TASK-06-log-power-functions.md) | 로그/지수 함수 구현 | FR-08~12 | ✅ |
 | [TASK-07](TASK-07-error-handling.md) | 오류 처리 구현 | NFR-06 | ✅ |
-| [TASK-08](TASK-08-precision.md) | 부동소수점 정밀도 처리 | NFR-05 | ⬜ |
+| [TASK-08](TASK-08-precision.md) | 부동소수점 정밀도 처리 | NFR-05 | ✅ |
 | [TASK-09](TASK-09-history.md) | 히스토리 구현 | FR-14~16 | ⬜ |
 | [TASK-10](TASK-10-memory.md) | 메모리 기능 구현 | FR-17~20 | ⬜ |
 | [TASK-11](TASK-11-ui-theme.md) | UI/테마 구현 | NFR-02 | ⬜ |
@@ -33,6 +33,6 @@
 ## 진행 현황
 
 - 전체 태스크: 13개
-- 완료: 7개 (TASK-01~07)
+- 완료: 8개 (TASK-01~08)
 - 진행 중: 0개
-- 대기: 6개
+- 대기: 5개
