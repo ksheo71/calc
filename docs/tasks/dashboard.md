@@ -16,7 +16,7 @@
 |--------|------|--------------|------|
 | [TASK-01](TASK-01-electron-setup.md) | Electron 프로젝트 초기 설정 | - | ✅ |
 | [TASK-02](TASK-02-arithmetic.md) | 기본 사칙연산 구현 | FR-01~04 | ✅ |
-| [TASK-03](TASK-03-display.md) | 화면 표시 구현 | FR-21, FR-22 | ⬜ |
+| [TASK-03](TASK-03-display.md) | 화면 표시 구현 | FR-21, FR-22 | ✅ |
 | [TASK-04](TASK-04-input-control.md) | 입력 제어 구현 | FR-23, FR-24, NFR-04 | ⬜ |
 | [TASK-05](TASK-05-trig-functions.md) | 삼각함수 및 각도 모드 구현 | FR-05, FR-06, FR-07, FR-13 | ⬜ |
 | [TASK-06](TASK-06-log-power-functions.md) | 로그/지수 함수 구현 | FR-08~12 | ⬜ |
@@ -33,6 +33,6 @@
 ## 진행 현황
 
 - 전체 태스크: 13개
-- 완료: 2개 (TASK-01, TASK-02)
+- 완료: 3개 (TASK-01, TASK-02, TASK-03)
 - 진행 중: 0개
-- 대기: 11개
+- 대기: 10개
