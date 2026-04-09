@@ -31,4 +31,19 @@ function sinRad(rad) { return Math.sin(rad); }
 function cosRad(rad) { return Math.cos(rad); }
 function tanRad(rad) { return Math.tan(rad); }
 
-module.exports = { add, subtract, multiply, divide, sinDeg, cosDeg, tanDeg, sinRad, cosRad, tanRad };
+function log10(val) {
+  if (val <= 0) return { error: '오류: 0 이하의 값은 로그를 계산할 수 없습니다' };
+  return Math.log10(val);
+}
+function ln(val) {
+  if (val <= 0) return { error: '오류: 0 이하의 값은 로그를 계산할 수 없습니다' };
+  return Math.log(val);
+}
+function sqrt(val) {
+  if (val < 0) return { error: '오류: 음수의 제곱근은 계산할 수 없습니다' };
+  return Math.sqrt(val);
+}
+function square(val) { return val * val; }
+function power(base, exp) { return Math.pow(base, exp); }
+
+module.exports = { add, subtract, multiply, divide, sinDeg, cosDeg, tanDeg, sinRad, cosRad, tanRad, log10, ln, sqrt, square, power };
