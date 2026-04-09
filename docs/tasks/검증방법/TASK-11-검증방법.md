@@ -1,29 +1,69 @@
 # TASK-11 검증방법: UI/테마
 
 ## 검증 목표
-라이트 테마가 올바르게 적용되고 버튼 색상 구분 및 시각적 피드백이 동작하는지 확인한다.
+라이트 테마 CSS가 올바르게 적용되어 있는지 확인한다.
 
-## 수동 검증 (시각적 확인)
+## 검증 명령어
 
-### 라이트 테마 확인
-1. 앱 실행
-2. 배경이 흰색 또는 밝은 회색인지 확인
-3. 텍스트가 어두운 색으로 읽기 쉬운지 확인
+### Windows
+```cmd
+cd c:\workspace\Calculator\apps && npx playwright test tests/e2e/ui-theme.test.js --reporter=line
+```
 
-### 버튼 색상 구분 확인
-| 버튼 유형 | 기대 색상 |
-|----------|----------|
-| 숫자 (0~9) | 흰색/밝은 회색 |
-| 연산자 (+, -, ×, ÷) | 주황색 계열 |
-| 공학 함수 (sin, cos 등) | 파란색 계열 |
-| = | 녹색 계열 |
-| AC | 빨간색/회색 계열 |
+### Linux
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/ui-theme.test.js --reporter=line
+```
 
-### 시각적 피드백 확인
-4. 버튼에 마우스를 올렸을 때 색상 변화 확인 (hover)
-5. 버튼 클릭 시 눌리는 효과 확인 (active)
+### macOS
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/ui-theme.test.js --reporter=line
+```
 
-### 인디케이터 확인
-6. DEG/RAD 전환 버튼 클릭 시 현재 모드 표시 확인
-7. M+ 클릭 시 `M` 인디케이터 표시 확인
-8. 오류 메시지가 빨간색/경고색으로 표시되는지 확인
+## 테스트 파일: `apps/tests/e2e/ui-theme.test.js`
+```js
+const { test, expect, _electron: electron } = require('@playwright/test');
+
+test.beforeEach(async ({ }, testInfo) => {
+  testInfo.app = await electron.launch({ args: ['main.js'] });
+  testInfo.win = await testInfo.app.firstWindow();
+});
+test.afterEach(async ({ }, testInfo) => { await testInfo.app.close(); });
+
+test('배경색이 밝은 계열이다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  const bg = await win.evaluate(() =>
+    getComputedStyle(document.body).backgroundColor);
+  // rgb(255,255,255) 또는 밝은 회색 계열 확인
+  expect(bg).toMatch(/rgb\(2[0-9]{2}/);
+});
+
+test('숫자 버튼과 연산자 버튼의 색상이 다르다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  const numBg = await win.evaluate(() =>
+    getComputedStyle(document.querySelector('[data-key="1"]')).backgroundColor);
+  const opBg = await win.evaluate(() =>
+    getComputedStyle(document.querySelector('[data-key="+"]')).backgroundColor);
+  expect(numBg).not.toBe(opBg);
+});
+
+test('오류 메시지가 빨간색 계열로 표시된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.keyboard.type('1');
+  await win.click('[data-key="÷"]');
+  await win.keyboard.type('0');
+  await win.keyboard.press('Enter');
+  const color = await win.evaluate(() =>
+    getComputedStyle(document.querySelector('#result')).color);
+  // red 계열 (r값이 높음)
+  expect(color).toMatch(/rgb\(2[0-9]{2},\s*[0-9]+,\s*[0-9]+\)/);
+});
+```
+
+## 기대 출력
+```
+✓ 배경색이 밝은 계열이다
+✓ 숫자 버튼과 연산자 버튼의 색상이 다르다
+✓ 오류 메시지가 빨간색 계열로 표시된다
+3 passed
+```

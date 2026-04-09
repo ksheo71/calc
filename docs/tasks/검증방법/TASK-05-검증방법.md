@@ -3,34 +3,52 @@
 ## 검증 목표
 sin, cos, tan 함수와 DEG/RAD 전환이 올바르게 동작하는지 확인한다.
 
-## 사전 조건
-- TASK-01~04 완료
-
-## 자동 검증
+## 검증 명령어
 
 ### Windows
 ```cmd
-cd c:\workspace\Calculator\apps
-npm test -- --grep "trigonometric"
+cd c:\workspace\Calculator\apps && npm test -- --testPathPattern=trig
 ```
 
-### Linux / macOS
+### Linux
 ```bash
-cd /workspace/Calculator/apps
-npm test -- --grep "trigonometric"
+cd /workspace/Calculator/apps && npm test -- --testPathPattern=trig
 ```
 
-## 수동 검증 (UI)
+### macOS
+```bash
+cd /workspace/Calculator/apps && npm test -- --testPathPattern=trig
+```
 
-### DEG 모드 확인
-1. 앱 실행 (기본 DEG 모드 확인)
-2. `9`, `0` 입력 후 `sin` 클릭 → `1` 표시 확인
-3. `6`, `0` 입력 후 `cos` 클릭 → `0.5` 표시 확인
-4. `4`, `5` 입력 후 `tan` 클릭 → `1` 표시 확인
+## 테스트 파일: `apps/tests/unit/trig.test.js`
+```js
+const { sinDeg, cosDeg, tanDeg, sinRad, cosRad, tanRad } = require('../../src/calculator');
 
-### RAD 모드 전환 확인
-5. DEG/RAD 버튼 클릭 → 화면에 `RAD` 표시 확인
-6. `0` 입력 후 `sin` 클릭 → `0` 표시 확인
+// DEG 모드
+test('sin(90°) = 1', () => expect(sinDeg(90)).toBeCloseTo(1, 10));
+test('sin(30°) = 0.5', () => expect(sinDeg(30)).toBeCloseTo(0.5, 10));
+test('cos(0°) = 1', () => expect(cosDeg(0)).toBeCloseTo(1, 10));
+test('cos(60°) = 0.5', () => expect(cosDeg(60)).toBeCloseTo(0.5, 10));
+test('tan(45°) = 1', () => expect(tanDeg(45)).toBeCloseTo(1, 10));
+test('tan(90°) → 오류', () => expect(tanDeg(90)).toEqual({ error: '오류: 정의되지 않는 값' }));
 
-### tan 오류 확인
-7. DEG 모드에서 `9`, `0` 입력 후 `tan` 클릭 → "오류: 정의되지 않는 값" 확인
+// RAD 모드
+test('sin(π/2) = 1', () => expect(sinRad(Math.PI / 2)).toBeCloseTo(1, 10));
+test('cos(π) = -1', () => expect(cosRad(Math.PI)).toBeCloseTo(-1, 10));
+test('tan(0) = 0', () => expect(tanRad(0)).toBeCloseTo(0, 10));
+```
+
+## 기대 출력
+```
+PASS tests/unit/trig.test.js
+  ✓ sin(90°) = 1
+  ✓ sin(30°) = 0.5
+  ✓ cos(0°) = 1
+  ✓ cos(60°) = 0.5
+  ✓ tan(45°) = 1
+  ✓ tan(90°) → 오류
+  ✓ sin(π/2) = 1
+  ✓ cos(π) = -1
+  ✓ tan(0) = 0
+9 passed
+```

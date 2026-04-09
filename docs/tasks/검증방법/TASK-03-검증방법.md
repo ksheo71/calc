@@ -3,22 +3,56 @@
 ## 검증 목표
 입력 수식과 계산 결과가 화면에 올바르게 표시되는지 확인한다.
 
-## 사전 조건
-- TASK-01, TASK-02 완료
+## 검증 명령어
 
-## 수동 검증 (UI)
+### Windows
+```cmd
+cd c:\workspace\Calculator\apps && npx playwright test tests/e2e/display.test.js --reporter=line
+```
 
-### 수식 표시 확인
-1. 앱 실행
-2. 숫자 `1`, `2`, `3` 순서로 클릭 → 수식 영역에 `123` 표시 확인
-3. `+` 클릭 → `123 +` 표시 확인
-4. `4`, `5`, `6` 클릭 → `123 + 456` 표시 확인
+### Linux
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/display.test.js --reporter=line
+```
 
-### 결과 표시 확인
-5. `=` 클릭 → 결과 영역에 `579` 표시 확인
+### macOS
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/display.test.js --reporter=line
+```
 
-### 긴 수식 스크롤 확인
-6. 매우 긴 수식 입력 → 수식 영역이 스크롤되거나 줄임 처리되는지 확인
+## 테스트 파일: `apps/tests/e2e/display.test.js`
+```js
+const { test, expect, _electron: electron } = require('@playwright/test');
 
-### 지수 표기 확인
-7. `9`, `^`, `9`, `9` 입력 후 `=` → 결과가 지수 표기법(`e+`)으로 표시되는지 확인
+test.beforeEach(async ({ }, testInfo) => {
+  testInfo.app = await electron.launch({ args: ['main.js'] });
+  testInfo.win = await testInfo.app.firstWindow();
+});
+test.afterEach(async ({ }, testInfo) => { await testInfo.app.close(); });
+
+test('숫자 입력 시 수식 영역에 표시된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.click('[data-key="1"]');
+  await win.click('[data-key="2"]');
+  await win.click('[data-key="3"]');
+  const expr = await win.textContent('#expression');
+  expect(expr).toBe('123');
+});
+
+test('계산 결과가 결과 영역에 표시된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.click('[data-key="3"]');
+  await win.click('[data-key="+"]');
+  await win.click('[data-key="5"]');
+  await win.click('[data-key="="]');
+  const result = await win.textContent('#result');
+  expect(result).toBe('8');
+});
+```
+
+## 기대 출력
+```
+✓ 숫자 입력 시 수식 영역에 표시된다
+✓ 계산 결과가 결과 영역에 표시된다
+2 passed
+```

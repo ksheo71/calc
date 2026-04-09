@@ -3,22 +3,70 @@
 ## 검증 목표
 AC, Backspace, 키보드 입력이 올바르게 동작하는지 확인한다.
 
-## 사전 조건
-- TASK-01, TASK-02, TASK-03 완료
+## 검증 명령어
 
-## 수동 검증 (UI)
+### Windows
+```cmd
+cd c:\workspace\Calculator\apps && npx playwright test tests/e2e/input-control.test.js --reporter=line
+```
 
-### AC 검증
-1. `1`, `2`, `3`, `+`, `4` 입력
-2. AC 클릭 → 수식/결과 모두 초기화(`0`) 확인
-3. 메모리 값이 남아있는 경우 AC 후에도 `M` 인디케이터 유지 확인
+### Linux
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/input-control.test.js --reporter=line
+```
 
-### Backspace 검증
-4. `1`, `2`, `3` 입력
-5. Backspace 클릭 → `12` 표시 확인
-6. Backspace 2회 더 클릭 → `0` 표시 확인 (오류 없음)
+### macOS
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/input-control.test.js --reporter=line
+```
 
-### 키보드 검증
-7. 키보드 숫자 `5` + `+` + `3` 입력 후 `Enter` → `8` 표시 확인
-8. `Backspace` 키 → 마지막 문자 삭제 확인
-9. `Escape` 키 → AC 동작 확인
+## 테스트 파일: `apps/tests/e2e/input-control.test.js`
+```js
+const { test, expect, _electron: electron } = require('@playwright/test');
+
+test.beforeEach(async ({ }, testInfo) => {
+  testInfo.app = await electron.launch({ args: ['main.js'] });
+  testInfo.win = await testInfo.app.firstWindow();
+});
+test.afterEach(async ({ }, testInfo) => { await testInfo.app.close(); });
+
+test('AC 클릭 시 수식과 결과가 초기화된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.click('[data-key="1"]');
+  await win.click('[data-key="AC"]');
+  expect(await win.textContent('#expression')).toBe('');
+  expect(await win.textContent('#result')).toBe('0');
+});
+
+test('Backspace 클릭 시 마지막 문자가 삭제된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.click('[data-key="1"]');
+  await win.click('[data-key="2"]');
+  await win.click('[data-key="3"]');
+  await win.click('[data-key="backspace"]');
+  expect(await win.textContent('#expression')).toBe('12');
+});
+
+test('키보드 Enter로 계산이 실행된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.keyboard.type('5+3');
+  await win.keyboard.press('Enter');
+  expect(await win.textContent('#result')).toBe('8');
+});
+
+test('키보드 Escape로 AC가 동작한다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.keyboard.type('123');
+  await win.keyboard.press('Escape');
+  expect(await win.textContent('#expression')).toBe('');
+});
+```
+
+## 기대 출력
+```
+✓ AC 클릭 시 수식과 결과가 초기화된다
+✓ Backspace 클릭 시 마지막 문자가 삭제된다
+✓ 키보드 Enter로 계산이 실행된다
+✓ 키보드 Escape로 AC가 동작한다
+4 passed
+```

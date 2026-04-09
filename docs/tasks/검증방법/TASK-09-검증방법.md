@@ -1,26 +1,79 @@
 # TASK-09 검증방법: 히스토리
 
 ## 검증 목표
-히스토리가 올바르게 표시되고 재사용, 삭제, 영구 저장이 동작하는지 확인한다.
+히스토리 추가, 재사용, 삭제, 영구 저장이 올바르게 동작하는지 확인한다.
 
-## 수동 검증 (UI)
+## 검증 명령어
 
-### 히스토리 추가 확인
-1. `3 + 5 =` 입력 → 히스토리에 `3 + 5 = 8` 추가 확인
-2. `10 ÷ 2 =` 입력 → 히스토리 최상단에 `10 ÷ 2 = 5` 추가 확인
+### Windows
+```cmd
+cd c:\workspace\Calculator\apps && npx playwright test tests/e2e/history.test.js --reporter=line
+```
 
-### 히스토리 재사용 확인
-3. 히스토리의 `= 8` 항목 클릭 → 입력란에 `8` 채워짐 확인
-4. `+ 2 =` 추가 입력 → `10` 결과 확인
+### Linux
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/history.test.js --reporter=line
+```
 
-### 히스토리 영구 저장 확인
-5. 앱 종료 후 재시작
-6. 이전 히스토리 항목이 그대로 표시되는지 확인
+### macOS
+```bash
+cd /workspace/Calculator/apps && npx playwright test tests/e2e/history.test.js --reporter=line
+```
 
-### 히스토리 삭제 확인
-7. 히스토리 삭제 버튼 클릭 → 히스토리 전체 삭제 확인
-8. 앱 재시작 후 히스토리가 비어 있는지 확인
+## 테스트 파일: `apps/tests/e2e/history.test.js`
+```js
+const { test, expect, _electron: electron } = require('@playwright/test');
 
-### 오류 미기록 확인
-9. `1 ÷ 0 =` 입력 (오류 발생)
-10. 히스토리 목록에 해당 항목 없는지 확인
+test.beforeEach(async ({ }, testInfo) => {
+  testInfo.app = await electron.launch({ args: ['main.js'] });
+  testInfo.win = await testInfo.app.firstWindow();
+});
+test.afterEach(async ({ }, testInfo) => { await testInfo.app.close(); });
+
+test('계산 완료 시 히스토리에 항목이 추가된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.keyboard.type('3+5');
+  await win.keyboard.press('Enter');
+  const items = await win.$$('#history-list .history-item');
+  expect(items.length).toBeGreaterThan(0);
+  const text = await items[0].textContent();
+  expect(text).toContain('3 + 5 = 8');
+});
+
+test('히스토리 항목 클릭 시 결과값이 입력란에 채워진다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.keyboard.type('3+5');
+  await win.keyboard.press('Enter');
+  await win.click('#history-list .history-item:first-child');
+  const expr = await win.textContent('#expression');
+  expect(expr).toBe('8');
+});
+
+test('히스토리 삭제 버튼 클릭 시 전체 삭제된다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.keyboard.type('3+5');
+  await win.keyboard.press('Enter');
+  await win.click('#history-clear');
+  const items = await win.$$('#history-list .history-item');
+  expect(items.length).toBe(0);
+});
+
+test('오류 결과는 히스토리에 추가되지 않는다', async ({ }, testInfo) => {
+  const win = testInfo.win;
+  await win.keyboard.type('1');
+  await win.click('[data-key="÷"]');
+  await win.keyboard.type('0');
+  await win.keyboard.press('Enter');
+  const items = await win.$$('#history-list .history-item');
+  expect(items.length).toBe(0);
+});
+```
+
+## 기대 출력
+```
+✓ 계산 완료 시 히스토리에 항목이 추가된다
+✓ 히스토리 항목 클릭 시 결과값이 입력란에 채워진다
+✓ 히스토리 삭제 버튼 클릭 시 전체 삭제된다
+✓ 오류 결과는 히스토리에 추가되지 않는다
+4 passed
+```

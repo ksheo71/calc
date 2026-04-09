@@ -3,24 +3,83 @@
 ## 검증 목표
 M+, M-, MR, MC가 올바르게 동작하는지 확인한다.
 
-## 수동 검증 (UI)
+## 검증 명령어
 
-### M+ / MR 확인
-1. `5 =` 입력 후 `M+` 클릭 → `M` 인디케이터 표시 확인
-2. AC 클릭 → `M` 인디케이터 유지 확인 (메모리 초기화 안 됨)
-3. `MR` 클릭 → 입력란에 `5` 채워짐 확인
+### Windows
+```cmd
+cd c:\workspace\Calculator\apps && npm test -- --testPathPattern=memory
+```
 
-### M- 확인
-4. `5 =` 입력 후 `M+` 클릭 (메모리 = 5)
-5. `3 =` 입력 후 `M-` 클릭 (메모리 = 2)
-6. `MR` 클릭 → 입력란에 `2` 확인
+### Linux
+```bash
+cd /workspace/Calculator/apps && npm test -- --testPathPattern=memory
+```
 
-### MC 확인
-7. 메모리에 값이 있는 상태에서 `MC` 클릭
-8. `M` 인디케이터 사라짐 확인
-9. `MR` 클릭 → `0` 표시 확인
+### macOS
+```bash
+cd /workspace/Calculator/apps && npm test -- --testPathPattern=memory
+```
 
-### 음수 메모리 확인
-10. `3 =` 입력 후 `M+` (메모리 = 3)
-11. `5 =` 입력 후 `M-` (메모리 = -2)
-12. `MR` 클릭 → `-2` 표시 확인
+## 테스트 파일: `apps/tests/unit/memory.test.js`
+```js
+const { MemoryManager } = require('../../src/memory');
+
+test('M+ 초기값 0에 5를 더하면 메모리 = 5', () => {
+  const mem = new MemoryManager();
+  mem.add(5);
+  expect(mem.value).toBe(5);
+});
+
+test('M+ 후 M- 하면 메모리 값이 감소한다', () => {
+  const mem = new MemoryManager();
+  mem.add(5);
+  mem.subtract(3);
+  expect(mem.value).toBe(2);
+});
+
+test('MR은 저장된 메모리 값을 반환한다', () => {
+  const mem = new MemoryManager();
+  mem.add(7);
+  expect(mem.recall()).toBe(7);
+});
+
+test('MC 후 메모리 값이 0이 된다', () => {
+  const mem = new MemoryManager();
+  mem.add(10);
+  mem.clear();
+  expect(mem.value).toBe(0);
+});
+
+test('메모리가 0이 아닐 때 hasValue가 true', () => {
+  const mem = new MemoryManager();
+  mem.add(5);
+  expect(mem.hasValue).toBe(true);
+});
+
+test('MC 후 hasValue가 false', () => {
+  const mem = new MemoryManager();
+  mem.add(5);
+  mem.clear();
+  expect(mem.hasValue).toBe(false);
+});
+
+test('메모리 값이 음수가 될 수 있다', () => {
+  const mem = new MemoryManager();
+  mem.add(3);
+  mem.subtract(5);
+  expect(mem.value).toBe(-2);
+});
+```
+
+## 기대 출력
+```
+PASS tests/unit/memory.test.js
+  ✓ M+ 초기값 0에 5를 더하면 메모리 = 5
+  ✓ M+ 후 M- 하면 메모리 값이 감소한다
+  ✓ MR은 저장된 메모리 값을 반환한다
+  ✓ MC 후 메모리 값이 0이 된다
+  ✓ 메모리가 0이 아닐 때 hasValue가 true
+  ✓ MC 후 hasValue가 false
+  ✓ 메모리 값이 음수가 될 수 있다
+7 passed
+```
