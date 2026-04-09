@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(ls -lh \"c:/workspace/Calculator/docs/requirements/FR-0\"*)",
-      "Bash(wc -l \"c:/workspace/Calculator/docs/requirements/FR-0\"*)"
+      "Bash(wc -l \"c:/workspace/Calculator/docs/requirements/FR-0\"*)",
+      "Bash(npm test:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(dir dist:*)",
+      "Bash(dir dist/win-unpacked)",
+      "Bash(dir dist/*.exe)",
+      "Bash(CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:win)",
+      "Bash(npx playwright:*)"
     ]
   }
 }
