@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공학용 계산기</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <div id="display">
+      <div id="mode-indicator">
+        <span id="angle-mode">DEG</span>
+        <span id="memory-indicator" class="hidden">M</span>
+      </div>
+      <div id="expression"></div>
+      <div id="result">0</div>
+    </div>
+
+    <div id="buttons">
+      <!-- 메모리 & 각도 -->
+      <button data-key="MC" class="btn btn-func">MC</button>
+      <button data-key="MR" class="btn btn-func">MR</button>
+      <button data-key="M+" class="btn btn-func">M+</button>
+      <button data-key="M-" class="btn btn-func">M-</button>
+
+      <!-- 공학 함수 행 1 -->
+      <button data-key="sin" class="btn btn-eng">sin</button>
+      <button data-key="cos" class="btn btn-eng">cos</button>
+      <button data-key="tan" class="btn btn-eng">tan</button>
+      <button data-key="DEG/RAD" class="btn btn-eng">DEG/RAD</button>
+
+      <!-- 공학 함수 행 2 -->
+      <button data-key="log" class="btn btn-eng">log</button>
+      <button data-key="ln" class="btn btn-eng">ln</button>
+      <button data-key="sqrt" class="btn btn-eng">√</button>
+      <button data-key="square" class="btn btn-eng">x²</button>
+
+      <!-- 공학 함수 행 3 -->
+      <button data-key="power" class="btn btn-eng">xʸ</button>
+      <button data-key="AC" class="btn btn-clear">AC</button>
+      <button data-key="backspace" class="btn btn-clear">⌫</button>
+      <button data-key="÷" class="btn btn-op">÷</button>
+
+      <!-- 숫자 행 1 -->
+      <button data-key="7" class="btn btn-num">7</button>
+      <button data-key="8" class="btn btn-num">8</button>
+      <button data-key="9" class="btn btn-num">9</button>
+      <button data-key="×" class="btn btn-op">×</button>
+
+      <!-- 숫자 행 2 -->
+      <button data-key="4" class="btn btn-num">4</button>
+      <button data-key="5" class="btn btn-num">5</button>
+      <button data-key="6" class="btn btn-num">6</button>
+      <button data-key="-" class="btn btn-op">−</button>
+
+      <!-- 숫자 행 3 -->
+      <button data-key="1" class="btn btn-num">1</button>
+      <button data-key="2" class="btn btn-num">2</button>
+      <button data-key="3" class="btn btn-num">3</button>
+      <button data-key="+" class="btn btn-op">+</button>
+
+      <!-- 숫자 행 4 -->
+      <button data-key="0" class="btn btn-num btn-wide">0</button>
+      <button data-key="." class="btn btn-num">.</button>
+      <button data-key="=" class="btn btn-eq">=</button>
+    </div>
+
+    <div id="history-panel">
+      <div id="history-header">
+        <span>히스토리</span>
+        <button id="history-clear">삭제</button>
+      </div>
+      <ul id="history-list"></ul>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

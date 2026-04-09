@@ -14,7 +14,7 @@
 
 | 태스크 | 설명 | 관련 요구사항 | 상태 |
 |--------|------|--------------|------|
-| [TASK-01](TASK-01-electron-setup.md) | Electron 프로젝트 초기 설정 | - | ⬜ |
+| [TASK-01](TASK-01-electron-setup.md) | Electron 프로젝트 초기 설정 | - | ✅ |
 | [TASK-02](TASK-02-arithmetic.md) | 기본 사칙연산 구현 | FR-01~04 | ⬜ |
 | [TASK-03](TASK-03-display.md) | 화면 표시 구현 | FR-21, FR-22 | ⬜ |
 | [TASK-04](TASK-04-input-control.md) | 입력 제어 구현 | FR-23, FR-24, NFR-04 | ⬜ |
@@ -33,6 +33,6 @@
 ## 진행 현황
 
 - 전체 태스크: 13개
-- 완료: 0개
+- 완료: 1개 (TASK-01)
 - 진행 중: 0개
-- 대기: 13개
+- 대기: 12개
