@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -lh \"c:/workspace/Calculator/docs/requirements/FR-0\"*)",
+      "Bash(wc -l \"c:/workspace/Calculator/docs/requirements/FR-0\"*)"
+    ]
+  }
+}
