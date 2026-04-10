@@ -23,6 +23,9 @@
       "renderer.js",
       "src/**/*"
     ],
+    "extraResources": [
+      { "from": "build/icon.ico", "to": "icon.ico" }
+    ],
     "win": {
       "target": "dir",
       "icon": "build/icon.ico",

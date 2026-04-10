@@ -26,29 +26,51 @@ function findRcedit() {
   return null;
 }
 
-const rcedit = findRcedit();
-if (!rcedit) {
-  console.error("rcedit-x64.exe not found in winCodeSign cache. Skipping icon set.");
-  process.exit(0);
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-if (!fs.existsSync(EXE)) {
-  console.error("Calculator.exe not found at", EXE);
-  process.exit(1);
+async function setIcon(rcedit, retries = 5, delayMs = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      execFileSync(rcedit, [
+        EXE,
+        "--set-icon", ICON,
+        "--set-version-string", "FileDescription", "Calculator",
+        "--set-version-string", "ProductName", "Calculator",
+        "--set-file-version", "1.0.0",
+        "--set-product-version", "1.0.0",
+      ]);
+      return true;
+    } catch (e) {
+      if (i < retries - 1) {
+        console.log(`Attempt ${i + 1} failed, retrying in ${delayMs}ms...`);
+        await sleep(delayMs);
+      } else {
+        throw e;
+      }
+    }
+  }
 }
 
-if (!fs.existsSync(ICON)) {
-  console.error("icon.ico not found at", ICON);
-  process.exit(1);
-}
+(async () => {
+  const rcedit = findRcedit();
+  if (!rcedit) {
+    console.error("rcedit-x64.exe not found in winCodeSign cache. Skipping icon set.");
+    process.exit(0);
+  }
 
-console.log("Setting icon on", EXE);
-execFileSync(rcedit, [
-  EXE,
-  "--set-icon", ICON,
-  "--set-version-string", "FileDescription", "Calculator",
-  "--set-version-string", "ProductName", "Calculator",
-  "--set-file-version", "1.0.0",
-  "--set-product-version", "1.0.0",
-]);
-console.log("Icon set successfully.");
+  if (!fs.existsSync(EXE)) {
+    console.error("Calculator.exe not found at", EXE);
+    process.exit(1);
+  }
+
+  if (!fs.existsSync(ICON)) {
+    console.error("icon.ico not found at", ICON);
+    process.exit(1);
+  }
+
+  console.log("Setting icon on", EXE);
+  await setIcon(rcedit);
+  console.log("Icon set successfully.");
+})();
