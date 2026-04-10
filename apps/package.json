@@ -7,13 +7,15 @@
     "start": "electron .",
     "test": "jest",
     "verify:launch": "npx playwright test tests/e2e/launch.test.js --reporter=line",
-    "build:win": "electron-builder --win",
+    "build:win": "electron-builder --win && node scripts/set-icon-win.js",
     "build:linux": "electron-builder --linux",
     "build:mac": "electron-builder --mac"
   },
   "build": {
     "appId": "com.calculator.app",
     "productName": "Calculator",
+    "icon": "build/icon.png",
+    "electronUpdaterCompatibility": "2.16",
     "files": [
       "main.js",
       "index.html",
@@ -22,13 +24,17 @@
       "src/**/*"
     ],
     "win": {
-      "target": "dir"
+      "target": "dir",
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "icon": "build/icon.png"
     },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "build/icon.png"
     }
   },
   "devDependencies": {
